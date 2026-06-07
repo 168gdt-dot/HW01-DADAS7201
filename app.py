@@ -9,7 +9,7 @@ st.set_page_config(layout="wide", page_title="SET50 Interactive Network")
 st.title("🕸️ SET50 Shareholder Interactive Network")
 st.write("กราฟเครือข่ายความเชื่อมโยงผู้ถือหุ้นรายใหญ่ (สามารถใช้เมาส์ซูม ลากจุด หรือกดดูข้อมูลได้)")
 
-# 🎨 ปรับแต่ง CSS สำหรับป้ายกำกับชื่อหุ้น (Tags) ให้เป็นระเบียบเมื่ออยู่ในแถบข้าง
+# ปรับแต่ง CSS สำหรับป้ายกำกับชื่อหุ้น (Tags) ให้เป็นระเบียบเมื่ออยู่ในแถบข้าง
 st.markdown("""
     <style>
     span[data-baseweb="tag"] {
@@ -156,11 +156,20 @@ try:
         st.markdown("---")
         
         # 6. แสดงตารางข้อมูลด้านล่าง
-        st.write("### 📋 รายละเอียดข้อมูลผู้ถือหุ้นในระบบ")
-        st.dataframe(
+        st.write("### รายละเอียดข้อมูลผู้ถือหุ้นในระบบ")
+        
+        # จัดเตรียมข้อมูลตารางและเรียงลำดับ
+        show_df = (
             filtered_df[['สัญลักษณ์', 'อันดับ', 'ชื่อผู้ถือหุ้น', 'จำนวนหุ้น', 'ร้อยละ (%)']]
             .sort_values(by=['สัญลักษณ์', 'อันดับ'])
-            .reset_index(drop=True),
+            .reset_index(drop=True)
+        )
+        
+        # ขยับตัวเลข Index ด้านซ้ายสุดให้เริ่มจาก 1
+        show_df.index = show_df.index + 1
+        
+        st.dataframe(
+            show_df,
             use_container_width=True
         )
         
